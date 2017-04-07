@@ -3,6 +3,15 @@ from plyer.facades import Screenshot
 from plyer.utils import whereis_exe
 
 
+class XwdScreenshot(Screenshot):
+    def __init__(self, file_path=None):
+        default_path = 'test.jpg'
+        super(XwdScreenshot, self).__init__(file_path or default_path)
+
+    def _take_shot(self):
+        subprocess.call(["xwd", "-root", "|", "convert", "-", self.file_path])
+
+
 class GnomeScreenshot(Screenshot):
     def __init__(self, file_path=None):
         default_path = 'test.jpg'
@@ -22,7 +31,9 @@ class ImportScreenshot(Screenshot):
 
 
 def instance():
-    if whereis_exe('gnome-screenshot'):
+    if whereis_exe('xwd'):
+        return XwdScreenshot()
+    elif whereis_exe('gnome-screenshot'):
         return GnomeScreenshot()
     elif whereis_exe('import'):
         return ImportScreenshot()

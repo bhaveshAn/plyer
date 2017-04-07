@@ -37,4 +37,5 @@ def instance():
         return GnomeScreenshot()
     elif whereis_exe('import'):
         return ImportScreenshot()
-    return Screenshot()
+    else:
+        return Screenshot()
